@@ -32,7 +32,7 @@ export function CheckoutForm({
       setErrorMessage(msg);
       onError?.(msg);
     } else {
-      sessionStorage.removeItem("@sumaiazaman/stripe-payment:intent");
+      sessionStorage.removeItem("@sumaiaaktar/stripe-payment:intent");
     }
 
     setIsLoading(false);

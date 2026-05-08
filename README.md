@@ -1,4 +1,4 @@
-# @sumaiazaman/stripe-payment
+# @sumaiaaktar/stripe-payment
 
 Stripe payment UI components for React and Next.js. Drop into any existing project.
 
@@ -11,7 +11,7 @@ Stripe payment UI components for React and Next.js. Drop into any existing proje
 ## Install
 
 ```bash
-npm install @sumaiazaman/stripe-payment
+npm install @sumaiaaktar/stripe-payment
 ```
 
 ## Peer Dependencies
@@ -47,7 +47,7 @@ import {
   StripeCheckout,
   PaymentStatus,
   usePaymentIntent,
-} from "@sumaiazaman/stripe-payment";
+} from "@sumaiaaktar/stripe-payment";
 
 // ─── Option A: All-in-one component ───────────────────────────────────────────
 
@@ -71,7 +71,7 @@ export default function CheckoutPage() {
 
 // ─── Option B: Separate components (more control) ─────────────────────────────
 
-import { StripeProvider, CheckoutForm } from "@sumaiazaman/stripe-payment";
+import { StripeProvider, CheckoutForm } from "@sumaiaaktar/stripe-payment";
 
 export default function CheckoutPage() {
   const { clientSecret, isLoading } = usePaymentIntent({ amount: 49.99 });
@@ -237,7 +237,7 @@ import type {
   CheckoutFormProps,
   StripeProviderProps,
   PaymentStatusProps,
-} from "@sumaiazaman/stripe-payment";
+} from "@sumaiaaktar/stripe-payment";
 ```
 
 ---

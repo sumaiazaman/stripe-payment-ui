@@ -15,7 +15,7 @@ interface UsePaymentIntentResult {
   reset: () => void;
 }
 
-const SESSION_KEY = "@sumaiazaman/stripe-payment:intent";
+const SESSION_KEY = "@sumaiaaktar/stripe-payment:intent";
 
 export function usePaymentIntent({
   amount,
