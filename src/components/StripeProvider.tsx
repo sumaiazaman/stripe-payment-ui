@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import type { StripeProviderProps } from "../types";
 
-const stripeInstances = new Map<string, Promise<Stripe | null>>();
+const stripeCache = new Map<string, Promise<Stripe | null>>();
 
-function getStripe(publishableKey: string) {
-  if (!stripeInstances.has(publishableKey)) {
-    stripeInstances.set(publishableKey, loadStripe(publishableKey));
+function getStripePromise(publishableKey: string) {
+  if (!stripeCache.has(publishableKey)) {
+    stripeCache.set(publishableKey, loadStripe(publishableKey));
   }
-  return stripeInstances.get(publishableKey)!;
+  return stripeCache.get(publishableKey)!;
 }
 
 export function StripeProvider({
@@ -18,7 +18,16 @@ export function StripeProvider({
   children,
   theme = "stripe",
 }: StripeProviderProps) {
-  const stripePromise = getStripe(publishableKey);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only render on client side — avoids SSR hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted || !publishableKey || !clientSecret) return null;
+
+  const stripePromise = getStripePromise(publishableKey);
 
   return (
     <Elements

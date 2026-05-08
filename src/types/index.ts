@@ -32,3 +32,11 @@ export interface PaymentStatusProps {
   onCompleted?: (payment: PaymentRecord) => void;
   onFailed?: (payment: PaymentRecord) => void;
 }
+
+export interface StripeCheckoutProps extends CheckoutFormProps {
+  clientSecret: string;
+  publishableKey: string;
+  theme?: "stripe" | "night" | "flat";
+  title?: string;
+  description?: string;
+}

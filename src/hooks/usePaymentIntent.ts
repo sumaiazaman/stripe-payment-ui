@@ -4,6 +4,7 @@ interface UsePaymentIntentOptions {
   amount: number;
   currency?: string;
   apiUrl?: string;
+  cache?: boolean;
 }
 
 interface UsePaymentIntentResult {
@@ -14,35 +15,22 @@ interface UsePaymentIntentResult {
   reset: () => void;
 }
 
-const SESSION_KEY = "stripe_payment_intent";
+const SESSION_KEY = "@sumaiazaman/stripe-payment:intent";
 
 export function usePaymentIntent({
   amount,
   currency = "usd",
   apiUrl = "/api/create-payment-intent",
+  cache = true,
 }: UsePaymentIntentOptions): UsePaymentIntentResult {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchIntent = useCallback(async () => {
+  const createIntent = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-
-    // Reuse cached intent from sessionStorage
-    const cached = sessionStorage.getItem(SESSION_KEY);
-    if (cached) {
-      try {
-        const { clientSecret, paymentIntentId } = JSON.parse(cached);
-        setClientSecret(clientSecret);
-        setPaymentIntentId(paymentIntentId);
-        setIsLoading(false);
-        return;
-      } catch {
-        sessionStorage.removeItem(SESSION_KEY);
-      }
-    }
 
     try {
       const res = await fetch(apiUrl, {
@@ -55,10 +43,14 @@ export function usePaymentIntent({
       if (data.error) {
         setError(data.error);
       } else {
-        sessionStorage.setItem(SESSION_KEY, JSON.stringify({
-          clientSecret: data.clientSecret,
-          paymentIntentId: data.paymentIntentId,
-        }));
+        if (cache) {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+            clientSecret: data.clientSecret,
+            paymentIntentId: data.paymentIntentId,
+            amount,
+            currency,
+          }));
+        }
         setClientSecret(data.clientSecret);
         setPaymentIntentId(data.paymentIntentId);
       }
@@ -67,16 +59,40 @@ export function usePaymentIntent({
     } finally {
       setIsLoading(false);
     }
-  }, [amount, currency, apiUrl]);
+  }, [amount, currency, apiUrl, cache]);
 
-  useEffect(() => { fetchIntent(); }, [fetchIntent]);
+  useEffect(() => {
+    if (!cache) {
+      createIntent();
+      return;
+    }
+
+    // Validate cached intent matches current amount/currency
+    try {
+      const cached = sessionStorage.getItem(SESSION_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        // Only reuse cache if amount and currency match
+        if (parsed.amount === amount && parsed.currency === currency) {
+          setClientSecret(parsed.clientSecret);
+          setPaymentIntentId(parsed.paymentIntentId);
+          setIsLoading(false);
+          return;
+        }
+      }
+    } catch {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+
+    createIntent();
+  }, [amount, currency, cache, createIntent]);
 
   const reset = useCallback(() => {
     sessionStorage.removeItem(SESSION_KEY);
     setClientSecret(null);
     setPaymentIntentId(null);
-    fetchIntent();
-  }, [fetchIntent]);
+    createIntent();
+  }, [createIntent]);
 
   return { clientSecret, paymentIntentId, isLoading, error, reset };
 }

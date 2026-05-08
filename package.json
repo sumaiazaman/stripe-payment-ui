@@ -4,6 +4,23 @@
   "description": "Stripe payment UI components for React and Next.js",
   "author": "Sumaia Zaman",
   "license": "MIT",
+  "homepage": "https://github.com/sumaiazaman/stripe-payment-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sumaiazaman/stripe-payment-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sumaiazaman/stripe-payment-ui/issues"
+  },
+  "keywords": [
+    "stripe",
+    "payment",
+    "react",
+    "nextjs",
+    "checkout",
+    "stripe-elements",
+    "payment-gateway"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

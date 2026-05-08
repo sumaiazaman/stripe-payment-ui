@@ -31,6 +31,8 @@ export function CheckoutForm({
       const msg = error.message ?? "An unexpected error occurred.";
       setErrorMessage(msg);
       onError?.(msg);
+    } else {
+      sessionStorage.removeItem("@sumaiazaman/stripe-payment:intent");
     }
 
     setIsLoading(false);

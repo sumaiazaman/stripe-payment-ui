@@ -1,15 +1,7 @@
 import React from "react";
 import { StripeProvider } from "./StripeProvider";
 import { CheckoutForm } from "./CheckoutForm";
-import type { CheckoutFormProps, StripeProviderProps } from "../types";
-
-interface StripeCheckoutProps extends CheckoutFormProps {
-  clientSecret: string;
-  publishableKey: string;
-  theme?: StripeProviderProps["theme"];
-  title?: string;
-  description?: string;
-}
+import type { StripeCheckoutProps } from "../types";
 
 export function StripeCheckout({
   clientSecret,

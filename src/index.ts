@@ -14,4 +14,5 @@ export type {
   StripeProviderProps,
   CheckoutFormProps,
   PaymentStatusProps,
+  StripeCheckoutProps,
 } from "./types";
