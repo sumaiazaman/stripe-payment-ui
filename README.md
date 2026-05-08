@@ -2,6 +2,12 @@
 
 Stripe payment UI components for React and Next.js. Drop into any existing project.
 
+> **Starting a new project from scratch?**
+> Clone the full demo app instead → [`stripe-payment`](https://github.com/sumaiazaman/stripe-payment)
+> ```bash
+> git clone https://github.com/sumaiazaman/stripe-payment.git
+> ```
+
 ## Install
 
 ```bash
